@@ -4,8 +4,7 @@
   <title id="filename">Quark</title>
   </head>
   <body>
-    <input type="hidden" id="node-id" value="">
-<script id="ourfile" src="9fowPvQ2GXdmhD2bN54EL9dRnio3kBQGyrD3fkbHwuTXD6z1wBU.json.js"></script>
+<script id="ourfile" src="9g8GohWvDR7SkSm5QWdkdXiY9hMEXo6xS6WPNNrQfjg9jg5H5on.json.js"></script>
   <script src="./libs/sigma.core.js"></script>
   <script src="./libs/conrad.js"></script>
   <script src="./libs/sigma.utils.js"></script>
@@ -180,6 +179,8 @@
           <select id="levels"><option disabled="disabled" selected="selected">Level</option></select><span class="glow" id="reset-btn">Reset</span>
           <hr />
           <d3v class="glow" onclick="json_export()">Export as JSON</d3v>
+          <d3v class="glow" onclick="csv_export()">Export as CSV</d3v>
+
           <a href="javascript:void(0);" class="glow" onclick="window.open('https://ergexplorer.com/addresses/' + document.getElementById('node-id').value, '_blank')">View on Explorer</a>
         </center>
         </div>
@@ -655,6 +656,26 @@
     filename: 'myGraph.json'
     });
   }
+
+  function csv_export() {
+  var csv = 'source,target,weight\n';
+
+  s.graph.edges().forEach(function(edge) {
+    csv += edge.source.replace('id=', '') + ','
+         + edge.target.replace('id=', '') + ','
+         + (edge.size || '') + '\n';
+  });
+
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var link = document.createElement("a");
+  var url = URL.createObjectURL(blob);
+  link.setAttribute("href", url);
+  link.setAttribute("download", "myGraph.csv");
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
   function png_export(){
   
   }
