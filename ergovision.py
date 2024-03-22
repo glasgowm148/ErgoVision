@@ -43,7 +43,12 @@ for seed in seeds:
 
 def crawl(addresses, processed, database, limit):
     threadpool = concurrent.futures.ThreadPoolExecutor(max_workers=10)
-    futures = (threadpool.submit(getTransactions, address, processed, database, limit) for address in addresses)
+    blacklist = set()  # Define your blacklist here
+    blacklist.add('9fLYPigGHXkTyyQvU9zzoT3RTAXJ4dfHjbkg6ik2fHKKxjprSrh') # FP
+    blacklist.add('9f2h3D4MuAgG5RRYG4VZwXHPa37qQk5Ss82WdcsJvWXKd2edZo3') # pg
+    futures = (threadpool.submit(getTransactions, address, processed, database, limit, blacklist) for address in addresses)
+    print(f"Processed: {processed}, Database: {database}, Limit: {limit}, Blacklist: {blacklist}")
+
     for i, _ in enumerate(concurrent.futures.as_completed(futures)):
         print('%s Progress: %i/%i        ' % (info, i + 1, len(addresses)), end='\r')
 
